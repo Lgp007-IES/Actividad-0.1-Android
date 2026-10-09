@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import com.example.simulacioncrudluis.Logic.Controller
-import com.example.simulacioncrudluis.Logic.interfaces.interfazCliente
 import com.example.simulacioncrudluis.R
 
-class MainActivity : ComponentActivity(), interfazCliente {
+class MainActivity : ComponentActivity() {
     private lateinit var controller: Controller
     private lateinit var simulatedDialog: Dialog
 
@@ -15,14 +14,16 @@ class MainActivity : ComponentActivity(), interfazCliente {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inicializar Controller y Dialog
         controller = Controller()
         simulatedDialog = Dialog()
 
-        // Pasamos la referencia de esta clase (que implementa OperationsInterface)
-        simulatedDialog.setListener(this)
+        // Pasamos las funciones del controlador encapsuladas en lambdas
+        simulatedDialog.setActions(
+            onAdd = { id, name, telf -> controller.controllerAdd(id, name, telf) },
+            onDelete = { id -> controller.controllerDelete(id) },
+            onUpdate = { id, name, telf -> controller.controllerUpdate(id, name, telf) }
+        )
 
-        // Capturar eventos de botones
         findViewById<Button>(R.id.btnInsert).setOnClickListener {
             simulatedDialog.show(Dialog.ActionType.INSERT, controller.getClients())
         }
@@ -34,17 +35,5 @@ class MainActivity : ComponentActivity(), interfazCliente {
         findViewById<Button>(R.id.btnDelete).setOnClickListener {
             simulatedDialog.show(Dialog.ActionType.DELETE, controller.getClients())
         }
-    }
-
-    override fun ClientAdd(id: Int, name: String) {
-        controller.controllerAdd(id, name)
-    }
-
-    override fun ClientDel(id: Int) {
-        controller.controllerDelete(id)
-    }
-
-    override fun ClientUpdate(id: Int, name: String) {
-        controller.controllerUpdate(id, name)
     }
 }

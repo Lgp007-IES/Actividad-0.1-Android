@@ -11,8 +11,8 @@ class Controller {
         Log.d("CRUD_Controller", "Datos inicializados: $clientList")
     }
 
-    fun controllerAdd(id: Int, name: String) {
-        clientList.add(Client(id, name))
+    fun controllerAdd(id: Int, name: String,telefono:String) {
+        clientList.add(Client(id, name,telefono))
     }
 
     fun controllerDelete(id: Int) : Boolean {
@@ -24,11 +24,12 @@ class Controller {
         return false
     }
 
-    fun controllerUpdate(id: Int, name: String) {
+    fun controllerUpdate(id: Int, name: String,telefono: String) {
         val client = clientList.find { it.id == id }
         if (client != null) {
             client.name = name
-            Log.d("CRUD_Controller", "Actualizado ID: $id con nombre: $name. Lista actual: $clientList")
+            client.telf = telefono
+            Log.d("CRUD_Controller", "Actualizado ID: $id con nombre: $name - Tel: $telefono. Lista actual: $clientList")
         }
     }
 
